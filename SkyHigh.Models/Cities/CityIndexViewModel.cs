@@ -1,11 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace SkyHigh.Models.Cities
 {
     public class CityIndexViewModel
     {
-        public IEnumerable<CityViewModel> CityViewModels { get; set; }
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string CountryName { get; set; }
+
+        public IEnumerable<string> AirportCodes { get; set; }
     }
 }

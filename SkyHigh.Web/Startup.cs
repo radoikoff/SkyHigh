@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SkyHigh.Data;
 using SkyHigh.Domain;
 using SkyHigh.Services;
+using AutoMapper;
 
 namespace SkyHigh.Web
 {
@@ -57,13 +58,23 @@ namespace SkyHigh.Web
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddTransient<ICitiesService, CitiesService>();
+            services.AddTransient<ICountriesService, CountriesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<SkyHighDbContext>();
+
+                dbContext.Database.Migrate();
+            }
+
+
             if (env.IsDevelopment())
             {
+
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }

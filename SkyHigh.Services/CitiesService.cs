@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SkyHigh.Data;
 using SkyHigh.Domain;
 using SkyHigh.Models.Cities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SkyHigh.Services
@@ -17,7 +19,7 @@ namespace SkyHigh.Services
             this.dbContext = dbContext;
         }
 
-        public async Task AddCityAsync(string name, string countryId)
+        public async Task CreateCityAsync(string name, string countryId)
         {
             var country = await this.dbContext.Countries.FindAsync(countryId);
 
@@ -51,86 +53,62 @@ namespace SkyHigh.Services
             return true;
         }
 
-        public async Task<CityIndexViewModel> GetAllCitiesAsync()
+        public async Task<IEnumerable<CityIndexViewModel>> GetAllCitiesAsync()
         {
-            var result = new CityIndexViewModel
-            {
-                CityViewModels = new List<CityViewModel>()
-                 {
-                     new CityViewModel
-                     {
-                         Id = Guid.NewGuid().ToString(),
-                         Name = "Sofia",
-                         CountryName = "Bulgaria",
-                         Airports = new List<string> {"LBSF, FRA, MUC" }
-                     },
 
-                     new CityViewModel
-                     {
-                         Id = Guid.NewGuid().ToString(),
-                         Name = "London",
-                         CountryName = "UK",
-                         Airports = new List<string> {"AZS, FFGT, UART, JJK" }
-                     },
-
-                     new CityViewModel
-                     {
-                         Id = Guid.NewGuid().ToString(),
-                         Name = "New York",
-                         CountryName = "United States of America",
-                         Airports = new List<string> {"JFK, HOL, LAX"}
-                     },
-                     new CityViewModel
-                     {
-                         Id = Guid.NewGuid().ToString(),
-                         Name = "Varna",
-                         CountryName = "Bulgaria",
-                         Airports = new List<string>()
-                     }
-                 }
-            };
-
-            return result;
+            var model = await this.dbContext.Cities
+                                  .OrderBy(c => c.Name)
+                                  .Select(c => new CityIndexViewModel
+                                  {
+                                      Id = c.Id,
+                                      Name = c.Name,
+                                      CountryName = c.Country.Name,
+                                      AirportCodes = c.Airports.Select(a => a.IcaoCode).ToList()
+                                  })
+                                  .ToArrayAsync();
+            return model;
         }
 
-        public CityCreateInputModel GetAllCountries()
+        public async Task<CityEditInputModel> GetCityEditData(string id)
         {
-            var viewModel = new CityCreateInputModel()
+            var model = await this.dbContext.Cities.Where(c => c.Id == id).Select(x => new CityEditInputModel
             {
-                Countries = new List<SelectListItem>
-                {
-                    new SelectListItem
-                    {
-                        Text = "Pehso",
-                        Value = "1"
-                    },
-                    new SelectListItem
-                    {
-                        Text = "Gosho",
-                        Value = "2"
-                    },
-                    new SelectListItem
-                    {
-                        Text = "Uli",
-                        Value = "3"
-                    }
-                }
+                NewName = x.Name,
+                CurrentName = x.Name,
+                CountryId = x.CountryId,
+                CurrentCountry = x.Country.Name
+            })
+            .SingleOrDefaultAsync();
 
-            };
-
-
-            return viewModel;
+            return model;
         }
-    }
 
-    public interface ICitiesService
-    {
-        Task<CityIndexViewModel> GetAllCitiesAsync();
+        public async Task<bool> IsCityExistsAsync(string name, string countryId)
+        {
+            var city = await this.dbContext.Cities.SingleOrDefaultAsync(c => c.Name == name && c.CountryId == countryId);
 
-        CityCreateInputModel GetAllCountries();
+            if (city != null)
+            {
+                return true;
+            }
 
-        Task AddCityAsync(string name, string countryId);
+            return false;
+        }
 
-        Task<bool> DeleteByIdAsync(string id);
+        public async Task UpdateCityAsync(string id, string newName, string countryId)
+        {
+            var city = await this.dbContext.Cities.FindAsync(id);
+
+            if (city == null)
+            {
+                return;
+            }
+
+            city.Name = newName;
+            city.CountryId = countryId;
+
+            this.dbContext.Cities.Update(city);
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }

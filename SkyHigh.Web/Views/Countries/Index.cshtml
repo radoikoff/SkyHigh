@@ -1,0 +1,48 @@
+﻿@model IEnumerable<SkyHigh.Models.Countries.CountryIndexViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Countries</h2>
+<hr />
+
+<div>
+    <a class="btn btn-primary" asp-action="Create">Add new Country</a>
+</div>
+
+<h3 class="text-center">Countries List</h3>
+
+<table class="table table-hover" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Country Name</th>
+            <th>Cities</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var country in Model)
+        {
+            <tr>
+                <td>@country.Name</td>
+                <td>@string.Join(", ", country.Cities)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@country.Id" class="btn btn-outline-primary">Edit</a>
+                    @if (country.Cities.Count() == 0)
+                    {
+                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal" data-cityid="@country.Id" data-cityname="@country.Name">Delete</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-outline-primary" disabled>Delete</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="Cities" asp-action="Index" class="btn btn-secondary">Go to cities</a>
+</div>

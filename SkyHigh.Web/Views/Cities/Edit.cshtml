@@ -1,0 +1,51 @@
+﻿@model SkyHigh.Models.Cities.CityEditInputModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>CityEditInputModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+            <div class="form-group">
+                <label asp-for="NewName" class="control-label"></label>
+                <input asp-for="NewName" class="form-control" />
+                <span asp-validation-for="NewName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Countries" class="control-label"></label>
+                <select class="custom-select" asp-for="CountryId" asp-items="@Model.Countries">
+                    <option value="" selected="">Please select a country...</option>
+                </select>
+                <span asp-validation-for="CountryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrentName" class="control-label"></label>
+                <input asp-for="CurrentName" class="form-control" disabled />
+                <input asp-for="CurrentName" type="hidden" />
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrentCountry" class="control-label"></label>
+                <input asp-for="CurrentCountry" class="form-control" disabled />
+                <input asp-for="CurrentCountry" type="hidden" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
