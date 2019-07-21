@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SkyHigh.Data\SkyHigh.Data.csproj" />
+    <ProjectReference Include="..\SkyHigh.Models\SkyHigh.Models.csproj" />
+    <ProjectReference Include="..\SkyHigh.Services\SkyHigh.Services.csproj" />
   </ItemGroup>
 
 </Project>

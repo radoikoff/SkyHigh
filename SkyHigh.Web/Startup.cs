@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SkyHigh.Data;
 using SkyHigh.Domain;
+using SkyHigh.Services;
 
 namespace SkyHigh.Web
 {
@@ -54,6 +55,8 @@ namespace SkyHigh.Web
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddTransient<ICitiesService, CitiesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

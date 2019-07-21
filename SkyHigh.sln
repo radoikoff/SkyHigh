@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyHigh.Web", "SkyHigh.Web\SkyHigh.Web.csproj", "{F4D96E4E-C863-46B7-AC1B-84EA5A7CB26B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkyHigh.Web", "SkyHigh.Web\SkyHigh.Web.csproj", "{F4D96E4E-C863-46B7-AC1B-84EA5A7CB26B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyHigh.Data", "SkyHigh.Data\SkyHigh.Data.csproj", "{929E28F4-1EE9-489F-9C2B-B7CEAB3ADE8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkyHigh.Data", "SkyHigh.Data\SkyHigh.Data.csproj", "{929E28F4-1EE9-489F-9C2B-B7CEAB3ADE8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyHigh.Domain", "SkyHigh.Domain\SkyHigh.Domain.csproj", "{71FC2E4A-B60F-4A20-9946-12429F887B30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkyHigh.Domain", "SkyHigh.Domain\SkyHigh.Domain.csproj", "{71FC2E4A-B60F-4A20-9946-12429F887B30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyHigh.Models", "SkyHigh.Models\SkyHigh.Models.csproj", "{8427A32A-071A-4C47-A879-9EFE4E050FF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyHigh.Services", "SkyHigh.Services\SkyHigh.Services.csproj", "{5B9F404C-6983-4CF2-BFEC-142C83FF19BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{71FC2E4A-B60F-4A20-9946-12429F887B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71FC2E4A-B60F-4A20-9946-12429F887B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71FC2E4A-B60F-4A20-9946-12429F887B30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8427A32A-071A-4C47-A879-9EFE4E050FF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8427A32A-071A-4C47-A879-9EFE4E050FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8427A32A-071A-4C47-A879-9EFE4E050FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8427A32A-071A-4C47-A879-9EFE4E050FF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B9F404C-6983-4CF2-BFEC-142C83FF19BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B9F404C-6983-4CF2-BFEC-142C83FF19BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B9F404C-6983-4CF2-BFEC-142C83FF19BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B9F404C-6983-4CF2-BFEC-142C83FF19BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
