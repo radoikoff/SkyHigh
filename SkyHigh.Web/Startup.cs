@@ -55,10 +55,13 @@ namespace SkyHigh.Web
                 options.User.RequireUniqueEmail = true;
             });
 
+            services.AddAutoMapper(typeof(ServicesMappingProfile));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddTransient<ICitiesService, CitiesService>();
             services.AddTransient<ICountriesService, CountriesService>();
+            services.AddTransient<IAircraftsService, AircraftsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<SkyHigh.Models.Aircrafts.AircraftIndexViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Aircrafts</h2>
+<hr />
+
+<div>
+    <a class="btn btn-primary" asp-action="Create">Add new aircraft</a>
+</div>
+
+<h3 class="text-center">Aircrafts List</h3>
+
+<table class="table table-hover" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Registration Number</th>
+            <th>Manufacturer</th>
+            <th>Type</th>
+            <th>Number of seats</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var aircraft in Model)
+        {
+            <tr>
+                <td>@aircraft.RegistrationNumber</td>
+                <td>@aircraft.Manufacturer</td>
+                <td>@aircraft.Type</td>
+                <td>@aircraft.MaxNumberOfPassengers</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@aircraft.Id" class="btn btn-outline-primary">Edit</a>
+                    @if (true)
+                    {
+                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal" data-cityid="@aircraft.Id" data-cityname="xxxx">Delete</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-outline-primary" disabled>Delete</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Go to home</a>
+</div>
+
