@@ -1,4 +1,5 @@
-﻿using SkyHigh.Models.Airports;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using SkyHigh.Models.Airports;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,5 +14,7 @@ namespace SkyHigh.Services
         Task<bool> IsAirportExistsAsync(string icaoCode);
 
         Task<IEnumerable<AirportIndexViewModel>> GetAllAirportsAsync();
+
+        Task<IEnumerable<SelectListItem>> GetAllAirportsAsDropdownListAsync();
     }
 }

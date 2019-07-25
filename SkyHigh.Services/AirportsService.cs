@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SkyHigh.Data;
 using SkyHigh.Domain;
@@ -67,6 +68,18 @@ namespace SkyHigh.Services
             //.ProjectTo<AirportIndexViewModel>();
 
             return model;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetAllAirportsAsDropdownListAsync()
+        {
+            var airports = await this.dbContext.Airports
+                                                .Select(a => new SelectListItem
+                                                {
+                                                    Value = a.Id,
+                                                    Text = $"{a.IcaoCode}-{a.Name}-{a.City.Name}"
+                                                })
+                                                .ToArrayAsync();
+            return airports;
         }
     }
 }

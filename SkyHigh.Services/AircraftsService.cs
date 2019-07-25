@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SkyHigh.Data;
 using SkyHigh.Domain;
@@ -31,6 +32,18 @@ namespace SkyHigh.Services
             await this.dbContext.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<SelectListItem>> GetAllAircraftsAsDropdownListAsync()
+        {
+            var aircrafts = await this.dbContext.Aircrafts
+                                                .Select(a => new SelectListItem
+                                                {
+                                                    Value = a.Id,
+                                                    Text = $"{a.RegistrationNumber}-{a.Type}-{a.Manufacturer}"
+                                                })
+                                                .ToArrayAsync();
+            return aircrafts;
+        }
+
         public async Task<IEnumerable<AircraftIndexViewModel>> GetAllAircraftsAsync()
         {
             var aircrafts = await this.dbContext.Aircrafts.ToArrayAsync();
@@ -56,6 +69,8 @@ namespace SkyHigh.Services
     public interface IAircraftsService
     {
         Task CreateAircraftAsync(AircraftCreateInputModel model);
+
+        Task<IEnumerable<SelectListItem>> GetAllAircraftsAsDropdownListAsync();
 
         Task<IEnumerable<AircraftIndexViewModel>> GetAllAircraftsAsync();
 
