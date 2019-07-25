@@ -1,0 +1,88 @@
+﻿@model IEnumerable<SkyHigh.Models.Airports.AirportIndexViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h2>Airports</h2>
+<hr />
+
+<div>
+    <a class="btn btn-primary" asp-action="Create">Add new Airport</a>
+</div>
+
+<h3 class="text-center">Airport List</h3>
+<table class="table table-hover" style="width: 100%">
+    <thead>
+        <tr>
+            <th>ICAO Code</th>
+            <th>Airport Name</th>
+            <th>City</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var airport in Model)
+        {
+            <tr>
+                <td>@airport.IcaoCode</td>
+                <td>@airport.Name</td>
+                <td>@airport.CityName</td>
+                <td class="justify-content-center">
+                    <a asp-action="Edit" asp-route-id="@airport.Id" class="btn btn-outline-primary">Edit</a>
+                    @if (true)
+                    {
+                        <btton type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal" data-cityid="@airport.Id" data-cityname="@airport.Name">Delete</btton>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-outline-primary" disabled>Delete</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="Countries" asp-action="Index" class="btn btn-secondary">Go to countries</a>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete a City</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Are you sure?</label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form action="/Cities/Delete" method="Post">
+                    <input type="hidden" name="id" value="placeholder">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var cityId = button.data('cityid')
+            var cityName = button.data('cityname')
+            var modal = $(this)
+            modal.find('.modal-body label').text('Are you sure you want to delete "' + cityName + '" city?')
+            modal.find('.modal-footer input').val(cityId)
+        })
+    </script>
+}

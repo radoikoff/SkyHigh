@@ -110,5 +110,18 @@ namespace SkyHigh.Services
             this.dbContext.Cities.Update(city);
             await this.dbContext.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<SelectListItem>> GetAllCitiesAsDropdownListAsync()
+        {
+            var cities = await this.dbContext.Cities
+                                                .OrderBy(c => c.Name)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = c.Name,
+                                                    Value = c.Id
+                                                })
+                                                .ToArrayAsync();
+            return cities;
+        }
     }
 }
