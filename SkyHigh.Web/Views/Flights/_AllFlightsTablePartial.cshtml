@@ -1,0 +1,30 @@
+﻿@model IEnumerable<SkyHigh.Models.Flights.FlightViewModel>
+
+
+<table class="table table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th>Flight Status</th>
+            <th>Ref No</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Distance</th>
+            <th>Aircraft</th>
+            <th>Reservations Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var flight in Model)
+        {
+            <tr>
+                <td>@flight.FlightStatus</td>
+                <td>@flight.ReferenceNumber</td>
+                <td>@flight.SourceAirportName
+                <td>@flight.DestinationAirportName</td>
+                <td>@flight.Distance</td>
+                <td>@flight.AircraftType</td>
+                <td>@flight.ReservationsCount</td>
+            </tr>
+        }
+    </tbody>
+</table>

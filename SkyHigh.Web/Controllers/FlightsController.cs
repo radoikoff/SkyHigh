@@ -21,9 +21,15 @@ namespace SkyHigh.Web.Controllers
             this.airportsService = airportsService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string airport)
         {
-            return View();
+            if (airport == null)
+            {
+                ViewData["TableType"] = "AllFlights";
+            }
+
+            FlightIndexViewModel model = this.flightsService.GetIndexView(airport);
+            return View(model);
         }
 
 
@@ -64,5 +70,7 @@ namespace SkyHigh.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
     }
 }

@@ -1,0 +1,49 @@
+﻿@model SkyHigh.Models.Flights.FlightIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Flights</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New flight</a>
+</p>
+
+
+
+<div class="row">
+    <form asp-action="Index" method="get" class="form-inline col-md-6">
+        <input type="text" class="form-control" placeholder="Search for airport..." name="airport">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </form>
+</div>
+
+<hr />
+
+<div class="row">
+
+    @if ((string)ViewData["TableType"] == "AllFlights")
+    {
+        <div class="col-lg-12">
+            <p>All flights</p>
+            <partial name="_AllFlightsTablePartial" for="Flights" />
+        </div>
+    }
+    else
+    {
+        <div class="col-lg-6">
+            <p>Arrivals</p>
+            @{ViewData["TableType"] = "Arrivals";}
+            <partial name="_FlightsTablePartial" for="Arrivals" />
+        </div>
+        <div class="col-lg-6">
+            <p>Departures</p>
+            @{ViewData["TableType"] = "Departures";}
+            <partial name="_FlightsTablePartial" for="Departures" />
+        </div>
+    }
+</div>
+

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using SkyHigh.Data;
 using SkyHigh.Domain;
@@ -30,6 +32,18 @@ namespace SkyHigh.Services
             await this.dbContext.SaveChangesAsync();
         }
 
+        public FlightIndexViewModel GetIndexView(string searchString)
+        {
+
+            var model = new FlightIndexViewModel
+            {
+                Flights = this.dbContext.Flights.ProjectTo<FlightViewModel>(this.mapper.ConfigurationProvider).ToList(),
+                AirportName = searchString
+            };
+
+            return model;
+        }
+
         public async Task<bool> IsFlightExistsAsync(string referenceNumber)
         {
             var flight = await this.dbContext.Flights.SingleOrDefaultAsync(a => a.ReferenceNumber == referenceNumber);
@@ -46,5 +60,7 @@ namespace SkyHigh.Services
         Task<bool> IsFlightExistsAsync(string referenceNumber);
 
         Task CreateFlightAsync(FlightCreateInputModel model);
+
+        FlightIndexViewModel GetIndexView(string searchString);
     }
 }
