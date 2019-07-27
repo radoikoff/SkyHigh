@@ -22,13 +22,9 @@ namespace SkyHigh.Web.Controllers
             this.reservationsService = reservationsService;
         }
 
-        public async Task<IActionResult> Index(FlightSearchViewModel model)
+        public IActionResult Index()
         {
-            
-            model.Airports = await this.airportsService.GetAllAirportsAsDropdownListAsync();
-
-
-            return View(model);
+            return RedirectToAction(nameof(Create));
         }
 
 
@@ -36,46 +32,35 @@ namespace SkyHigh.Web.Controllers
         {
             var model = this.reservationsService.GetRoutes(sourceAirportId, destinationAirportId);
 
-            return PartialView("Routes", model);
+            return PartialView("_RoutesPartial", model);
         }
 
-        //public async Task<IActionResult> Create()
-        //{
-        //    var model = new FlightCreateInputModel
-        //    {
-        //        //Aircrafts = await this.aircraftsService.GetAllAircraftsAsDropdownListAsync(),
-        //        Airports = await this.airportsService.GetAllAirportsAsDropdownListAsync()
-        //    };
+        public async Task<IActionResult> Create()
+        {
+            var model = new ReservationCreateInputModel
+            {
+                Airports = await this.airportsService.GetAllAirportsAsDropdownListAsync()
+            };
+            return View(model);
+        }
 
-        //    return View();
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Create(ReservationCreateInputModel model)
+        {
+            if (model.SourceAirportId == model.DestinationAirportId)
+            {
+                this.ModelState.AddModelError("DestinationAirportId", "Source and destination airports must be different");
+            }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create(FlightCreateInputModel model)
-        //{
-        //    bool isFlightExisits = await this.flightsService.IsFlightExistsAsync(model.ReferenceNumber);
+            if (!this.ModelState.IsValid)
+            {
+                model.Airports = await this.airportsService.GetAllAirportsAsDropdownListAsync();
+                return this.View(model);
+            }
+            ;
 
-        //    if (isFlightExisits)
-        //    {
-        //        this.ModelState.AddModelError("ReferenceNumber", "Provided flight number already exists");
-        //    }
-
-        //    if (model.SourceAirportId == model.DestinationAirportId)
-        //    {
-        //        this.ModelState.AddModelError("DestinationAirportId", "Source and destination airports must be different");
-        //    }
-
-        //    if (!this.ModelState.IsValid)
-        //    {
-        //        //model.Aircrafts = await this.aircraftsService.GetAllAircraftsAsDropdownListAsync();
-        //        model.Airports = await this.airportsService.GetAllAirportsAsDropdownListAsync();
-        //        return this.View(model);
-        //    }
-
-        //    await this.flightsService.CreateFlightAsync(model);
-
-        //    return RedirectToAction(nameof(Index));
-        //}
+            return RedirectToAction("Index", "Home");
+        }
 
 
     }

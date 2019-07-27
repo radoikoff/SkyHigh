@@ -11,8 +11,5 @@ namespace SkyHigh.Models.Reservations
 {
     public class ReservationIndexViewModel
     {
-        public FlightSearchViewModel SearchModel { get; set; }
-
-        public IEnumerable<Route> Routes { get; set; }
     }
 }

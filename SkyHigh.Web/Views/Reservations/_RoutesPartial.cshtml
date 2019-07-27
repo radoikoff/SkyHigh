@@ -1,9 +1,5 @@
 ﻿@model IEnumerable<SkyHigh.Models.Routes.Route>
 
-@{
-    ViewData["Title"] = "Routes";
-}
-
 <h3>Please choose your departing flight</h3>
 <hr />
 
@@ -17,7 +13,10 @@
                 <p class="card-text">@flight.SourceAirportIcaoCode - @flight.DestinationAirportIcaoCode</p>
                 <p class="card-text">@flight.ReferenceNumber</p>
             }
-
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="RadioInput" id="exampleRadios1" value="option1" checked>
+            <label class="form-check-label" for="exampleRadios1">Default radio</label>
+        </div>
         </div>
     </div>
 }

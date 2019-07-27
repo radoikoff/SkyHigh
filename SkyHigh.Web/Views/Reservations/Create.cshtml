@@ -1,0 +1,170 @@
+﻿@model SkyHigh.Models.Reservations.ReservationCreateInputModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+
+<hr />
+
+<form asp-action="Create" method="post">
+    @*<input type="hidden" id="modelState" name="modelState" value="@ViewData.ModelState.IsValid.ToString()" />*@
+    <div class="form-row">
+        <div class="form-group col-md-5">
+            <label asp-for="SourceAirportId" class="control-label"></label>
+            <select class="custom-select" asp-for="SourceAirportId" asp-items="@Model.Airports" id="sourceAirport">
+                <option value="" selected="">Please select...</option>
+            </select>
+            <span asp-validation-for="SourceAirportId" class="text-danger" id="src-airport-validation"></span>
+        </div>
+        <div class="form-group col-md-1 d-flex flex-column">
+            <button type="button" class="btn btn-outline-info mt-auto" onclick="swapAirports()">sw</button>
+        </div>
+        <div class="form-group col-md-5">
+            <label asp-for="DestinationAirportId" class="control-label"></label>
+            <select class="custom-select" asp-for="DestinationAirportId" asp-items="@Model.Airports" id="destinationAirport">
+                <option value="" selected="">Please select...</option>
+            </select>
+            <span asp-validation-for="DestinationAirportId" class="text-danger" id="dest-airport-validation"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="form-check">
+                <input asp-for="OneWay" type="checkbox" class="form-check-input" onchange="showHide()" />
+                <label asp-for="OneWay" class="form-check-label"></label>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label asp-for="DepartureDate"></label>
+            <input asp-for="DepartureDate" type="date" class="form-control" />
+            <span asp-validation-for="DepartureDate" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2" id="retrunDate">
+            <label asp-for="ReturnDate"></label>
+            <input asp-for="ReturnDate" type="date" class="form-control" />
+            <span asp-validation-for="DepartureDate" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2 d-flex flex-column">
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="TravelClass"></label>
+            <select class="custom-select" asp-for="TravelClass" asp-items="@Model.TravelClasses">
+                <option value="" selected="">Please select...</option>
+            </select>
+            <span asp-validation-for="TravelClass" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2 d-flex flex-column">
+            <button type="button" class="btn btn-primary mt-auto" onclick="loadRoutes()">Search</button>
+        </div>
+        <div id="routesContainer">
+
+        </div>
+        <div class="form-group col-md-2 d-flex flex-column">
+            <button type="submit" class="btn btn-primary mt-auto">Book Now</button>
+        </div>
+    </div>
+</form>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script type="text/javascript">
+    function showHide() {
+        $('#retrunDate').toggleClass('invisible');
+
+        //var DateOptions = {
+        //    singleDatePicker: true
+        //};
+
+        //$("#picker").daterangepicker(DateOptions);
+    }
+
+    //$(function () {
+    //    $('#picker').daterangepicker({
+    //        singleDatePicker: false,
+    //        minYear: 1901,
+    //        maxYear: parseInt(moment().format('YYYY'), 5)
+    //    }, function (start, end, label) {
+    //        var years = moment().diff(start, 'years');
+    //        alert("You are " + years + " years old!");
+    //    });
+    //});
+
+    function swapAirports() {
+        var src = $('#sourceAirport').val();
+        var dest = $('#destinationAirport').val();
+
+        $('#sourceAirport').val(dest);
+        $('#destinationAirport').val(src);
+    };
+
+
+    function loadRoutes(sourceAirportId, destinationAirportId) {
+        var src = $('#sourceAirport').val();
+        var dest = $('#destinationAirport').val();
+        var isNotValid = false;
+        var errMessage = '<span>The airport is required</span>';
+
+        if (src === '') {
+            $('#src-airport-validation').empty();
+            $('#src-airport-validation').append(errMessage);
+            isNotValid = true;
+        }
+
+        if (dest === '') {
+            $('#dest-airport-validation').empty();
+            $('#dest-airport-validation').append(errMessage);
+            isNotValid = true;
+        }
+
+        if (isNotValid) {
+            $("#routesContainer").empty();
+            return;
+        }
+
+        $.ajax({
+            url: `/Reservations/Routes`,
+            data: { sourceAirportId: src, destinationAirportId: dest },
+            success: function (res) {
+                $("#routesContainer").empty();
+                $("#routesContainer").append(res);
+            },
+            error: function (res) {
+                $("#routesContainer").empty();
+                console.log(res);
+            }
+        });
+    }
+
+//$(function () {
+//    var isValid = $("#modelState").val();
+//    if (isValid == 'True') {
+//        var src = $('#sourceAirport').val();
+//        var dest = $('#destinationAirport').val();
+//        $.ajax({
+//            url: `Reservations/Routes`,
+//            data: { sourceAirportId: src, destinationAirportId: dest },
+//            success: function (res) {
+//                //$("#routesContainer").empty();
+//                $("#routesContainer").append(res);
+//            },
+//            error: function (res) {
+//                console.log(res);
+//            }
+//        });
+//    }
+//})
+
+</script>
+}
