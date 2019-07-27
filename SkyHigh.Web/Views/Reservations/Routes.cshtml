@@ -1,0 +1,25 @@
+﻿@model IEnumerable<SkyHigh.Models.Routes.Route>
+
+@{
+    ViewData["Title"] = "Routes";
+}
+
+<h3>Please choose your departing flight</h3>
+<hr />
+
+@foreach (var route in Model)
+{
+    <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
+        <div class="card-header">Header</div>
+        <div class="card-body">
+            @foreach (var flight in route.Flights)
+            {
+                <p class="card-text">@flight.SourceAirportIcaoCode - @flight.DestinationAirportIcaoCode</p>
+                <p class="card-text">@flight.ReferenceNumber</p>
+            }
+
+        </div>
+    </div>
+}
+
+

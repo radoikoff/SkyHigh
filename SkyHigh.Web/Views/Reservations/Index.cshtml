@@ -1,0 +1,90 @@
+﻿@model SkyHigh.Models.Reservations.FlightSearchViewModel
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<div>
+    <partial name="_SearchFlightsPartial" for="@Model" />
+</div>
+
+<div id="routesContainer">
+    
+</div>
+
+
+
+
+
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+        function showHide() {
+            $('#retrunDate').toggleClass('invisible');
+
+            var DateOptions = {
+                singleDatePicker: true
+            };
+
+            $("#picker").daterangepicker(DateOptions);
+        }
+
+        $(function () {
+            $('#picker').daterangepicker({
+                singleDatePicker: false,
+                minYear: 1901,
+                maxYear: parseInt(moment().format('YYYY'), 5)
+            }, function (start, end, label) {
+                var years = moment().diff(start, 'years');
+                alert("You are " + years + " years old!");
+            });
+        });
+
+        function swapAirports() {
+            var src = $('#sourceAirport').val();
+            var dest = $('#destinationAirport').val();
+
+            $('#sourceAirport').val(dest);
+            $('#destinationAirport').val(src);
+        };
+
+
+        //function loadRoutes(sourceAirportId, destinationAirportId) {
+        //    $.ajax({
+        //        url: `Reservations/Routes`,
+        //        data: { sourceAirportId: sourceAirportId, destinationAirportId: destinationAirportId },
+        //        success: function (res) {
+        //            $("#routesContainer").empty();
+        //            $("#routesContainer").append(res);
+        //        },
+        //        error: function (res) {
+        //            console.log(res);
+        //        }
+        //    });
+        //}
+
+        $(function () {
+            var isValid = $("#modelState").val();
+            if (isValid == 'True') {
+                var src = $('#sourceAirport').val();
+                var dest = $('#destinationAirport').val();
+                $.ajax({
+                    url: `Reservations/Routes`,
+                    data: { sourceAirportId: src, destinationAirportId: dest },
+                    success: function (res) {
+                        //$("#routesContainer").empty();
+                        $("#routesContainer").append(res);
+                    },
+                    error: function (res) {
+                        console.log(res);
+                    }
+                });
+            }
+        })
+
+    </script>
+}

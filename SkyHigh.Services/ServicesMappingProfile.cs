@@ -23,6 +23,7 @@ namespace SkyHigh.Services
                 .ForMember(m => m.FlightStatus, opt => opt.MapFrom(s => FlightStatus.Scheduled));
 
             CreateMap<Flight, FlightViewModel>();
+            CreateMap<Flight, BookingFlightViewModel>();
 
 
         }
