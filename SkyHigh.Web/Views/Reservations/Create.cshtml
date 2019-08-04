@@ -20,9 +20,9 @@
             <span asp-validation-for="SourceAirportId" class="text-danger"></span>
         </div>
         <div class="form-group col-md-1 d-flex flex-column">
-            <button type="button" class="btn btn-outline-info mt-auto" onclick="swapAirports()">
-                <i class="fa fa-exchange fa-lg" area-hidden="true"></i>
-            </button>
+            @*<button type="button" class="btn btn-outline-info mt-auto" onclick="swapAirports()">*@
+            <a href="#" class="text-center mt-auto" onclick="swapAirports()"> <i class="fa fa-exchange fa-lg" area-hidden="true"></i></a>
+            @*</button>*@
         </div>
         <div class="form-group col-md-5">
             <label asp-for="DestinationAirportId" class="control-label"></label>
@@ -34,21 +34,25 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-12">
-            <div class="form-check">
-                <input asp-for="OneWay" type="checkbox" class="form-check-input" onchange="showHide()" />
-                <label asp-for="OneWay" class="form-check-label"></label>
+            <div class="form-check form-check-inline">
+                <input asp-for="TripType" class="form-check-input" type="radio" id="tripType1" value="Return" checked>
+                <label class="form-check-label" for="tripType1">Return</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input asp-for="TripType" class="form-check-input" type="radio" id="tripType2" value="One-way">
+                <label class="form-check-label" for="tripType2">One-way</label>
             </div>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-2">
             <label asp-for="DepartureDate"></label>
-            <input asp-for="DepartureDate" type="text" class="form-control" />
+            <input asp-for="DepartureDate" type="text" class="form-control" readonly style="cursor:pointer; background-color: white" value="@DateTime.UtcNow.Date.ToString("dd-MMM-yyyy")">
             <span asp-validation-for="DepartureDate" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2" id="retrunDate">
             <label asp-for="ReturnDate"></label>
-            <input asp-for="ReturnDate" type="text" class="form-control" />
+            <input asp-for="ReturnDate" type="text" class="form-control" readonly style="cursor:pointer; background-color: white" value="@DateTime.UtcNow.AddDays(1).Date.ToString("dd-MMM-yyyy")" />
             <span asp-validation-for="ReturnDate" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2 d-flex flex-column">
@@ -56,12 +60,12 @@
         <div class="form-group col-md-3">
             <label asp-for="TravelClass"></label>
             <select class="custom-select" asp-for="TravelClass" asp-items="@Model.TravelClasses">
-                <option value="" selected="">Please select...</option>
+                @*<option value="" selected="">Please select...</option>*@
             </select>
             <span asp-validation-for="TravelClass" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2 d-flex flex-column">
-            <button type="button" class="btn btn-primary mt-auto" onclick="loadRoutes()">Search</button>
+            <button type="button" class="btn btn-primary mt-auto" onclick="loadRoutes()"><i class="fa fa-search fa-lg"></i> Search</button>
         </div>
         <div id="routesContainer">
 
@@ -82,9 +86,41 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script type="text/javascript">
-        function showHide() {
-            $('#retrunDate').toggleClass('invisible');
-        };
+
+        $('input[type=radio][name=TripType]').change(function () {
+
+            var departure = $('input[name="DepartureDate"]');
+            var ret = $('input[name="ReturnDate"]');
+            var dateFormat = 'DD-MMM-YYYY';
+
+            if (this.value == 'One-way') {
+                $(departure.daterangepicker({
+                    singleDatePicker: true,
+                    locale: { format: dateFormat },
+                }, function (start, end, label) {
+                    ret.val('');
+                    ret.data('daterangepicker').setStartDate(start);
+                    ret.data('daterangepicker').setEndDate(start);
+                }));
+                $('#retrunDate').toggleClass('invisible');
+            }
+            else if (this.value == 'Return') {
+                $(departure.daterangepicker({
+                    autoUpdateInput: false,
+                    locale: { format: dateFormat },
+                    startDate: departure.val(),
+                    endDate: ret.val()
+                }, function (start, end, label) {
+                    departure.val(start.format(dateFormat));
+                    ret.val(end.format(dateFormat))
+                    departure.data('daterangepicker').setStartDate(start);
+                    departure.data('daterangepicker').setEndDate(end);
+                    ret.data('daterangepicker').setStartDate(start);
+                    ret.data('daterangepicker').setEndDate(end);
+                }));
+                $('#retrunDate').toggleClass('invisible');
+            }
+        });
 
         $(function datePickersInit() {
 
@@ -95,17 +131,25 @@
             function cb(start, end, label) {
                 departure.val(start.format(dateFormat));
                 ret.val(end.format(dateFormat))
+                departure.data('daterangepicker').setStartDate(start);
+                departure.data('daterangepicker').setEndDate(end);
+                ret.data('daterangepicker').setStartDate(start);
+                ret.data('daterangepicker').setEndDate(end);
             };
 
             $(departure.daterangepicker({
-                opens: 'left',
-                autoUpdateInput: false
+                autoUpdateInput: false,
+                locale: { format: dateFormat },
+                startDate: departure.val(),
+                endDate: ret.val()
             }, cb
             ));
 
             $(ret.daterangepicker({
-                opens: 'left',
-                autoUpdateInput: false
+                autoUpdateInput: false,
+                locale: { format: dateFormat },
+                startDate: departure.val(),
+                endDate: ret.val()
             }, cb
             ));
         });

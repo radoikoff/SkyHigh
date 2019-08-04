@@ -29,8 +29,7 @@ namespace SkyHigh.Models.Reservations
         [Display(Name = "Return Date")]
         public DateTime? ReturnDate { get; set; }
 
-        [Display(Name = "One Way")]
-        public bool OneWay { get; set; }
+        public string TripType { get; set; }
 
         [Required]
         [Display(Name = "Travel Class")]
