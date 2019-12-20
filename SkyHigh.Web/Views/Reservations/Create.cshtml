@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Create";
+
+    var routesModel = ViewData["routes"] as SkyHigh.Models.Routes.RoutesInputModel;
 }
 
 <h1>Search for flight</h1>
@@ -10,26 +12,25 @@
 <hr />
 
 <form asp-action="Create" method="post">
-    @*<input type="hidden" id="modelState" name="modelState" value="@ViewData.ModelState.IsValid.ToString()" />*@
     <div class="form-row">
         <div class="form-group col-md-5">
             <label asp-for="SourceAirportId" class="control-label"></label>
+            <span asp-validation-for="SourceAirportId" class="text-danger"></span>
             <select class="custom-select" asp-for="SourceAirportId" asp-items="@Model.Airports" id="sourceAirport">
                 <option value="" selected="">Please select...</option>
             </select>
-            <span asp-validation-for="SourceAirportId" class="text-danger"></span>
         </div>
         <div class="form-group col-md-1 d-flex flex-column">
-            @*<button type="button" class="btn btn-outline-info mt-auto" onclick="swapAirports()">*@
-            <a href="#" class="text-center mt-auto" onclick="swapAirports()"> <i class="fa fa-exchange fa-lg" area-hidden="true"></i></a>
-            @*</button>*@
+            <button type="button" class="btn text-center mt-auto text-info" onclick="swapAirports()">
+                <i class="fa fa-exchange fa-lg" area-hidden="true"></i>
+            </button>
         </div>
         <div class="form-group col-md-5">
             <label asp-for="DestinationAirportId" class="control-label"></label>
+            <span asp-validation-for="DestinationAirportId" class="text-danger"></span>
             <select class="custom-select" asp-for="DestinationAirportId" asp-items="@Model.Airports" id="destinationAirport">
                 <option value="" selected="">Please select...</option>
             </select>
-            <span asp-validation-for="DestinationAirportId" class="text-danger"></span>
         </div>
     </div>
     <div class="form-row">
@@ -55,20 +56,32 @@
             <input asp-for="ReturnDate" type="text" class="form-control" readonly style="cursor:pointer; background-color: white" value="@DateTime.UtcNow.AddDays(1).Date.ToString("dd-MMM-yyyy")" />
             <span asp-validation-for="ReturnDate" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-2 d-flex flex-column">
+        <div class="form-group col-md-1">
+            <label asp-for="PassengersCount"></label>
+            <select class="custom-select" asp-for="PassengersCount">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <span asp-validation-for="TravelClass" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-1 d-flex flex-column">
         </div>
         <div class="form-group col-md-3">
             <label asp-for="TravelClass"></label>
-            <select class="custom-select" asp-for="TravelClass" asp-items="@Model.TravelClasses">
-                @*<option value="" selected="">Please select...</option>*@
-            </select>
+            <select class="custom-select" asp-for="TravelClass" asp-items="@Model.TravelClasses"></select>
             <span asp-validation-for="TravelClass" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2 d-flex flex-column">
             <button type="button" class="btn btn-primary mt-auto" onclick="loadRoutes()"><i class="fa fa-search fa-lg"></i> Search</button>
         </div>
-        <div id="routesContainer">
-
+        @*<div> <span asp-validation-for="InboundRouteIds" class="text-danger"></span></div>*@
+        <div id="routesContainer" class="col-md-12">
+            @if (routesModel != null)
+            {
+                <partial name="_RoutesPartial" for="@routesModel" />
+            }
         </div>
         <div class="form-group col-md-2 d-flex flex-column">
             <button type="submit" class="btn btn-primary mt-auto">Book Now</button>

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SkyHigh.Models.Flights;
 using SkyHigh.Models.Reservations;
+using SkyHigh.Models.Routes;
 using SkyHigh.Services;
 
 namespace SkyHigh.Web.Controllers
@@ -30,7 +31,11 @@ namespace SkyHigh.Web.Controllers
 
         public IActionResult Routes(string sourceAirportId, string destinationAirportId)
         {
-            var model = this.reservationsService.GetRoutes(sourceAirportId, destinationAirportId);
+            var model = new RoutesInputModel
+            {
+                InboundRoutes = this.reservationsService.GetRoutes(sourceAirportId, destinationAirportId),
+                OutboundRoutes = this.reservationsService.GetRoutes(sourceAirportId, destinationAirportId)
+            };
 
             return PartialView("_RoutesPartial", model);
         }
@@ -55,6 +60,13 @@ namespace SkyHigh.Web.Controllers
             if (!this.ModelState.IsValid)
             {
                 model.Airports = await this.airportsService.GetAllAirportsAsDropdownListAsync();
+
+                var routes = new RoutesInputModel
+                {
+                    InboundRoutes = this.reservationsService.GetRoutes(model.SourceAirportId, model.DestinationAirportId),
+                    OutboundRoutes = this.reservationsService.GetRoutes(model.SourceAirportId, model.DestinationAirportId)
+                };
+                this.ViewData["routes"] = routes;
                 return this.View(model);
             }
             ;

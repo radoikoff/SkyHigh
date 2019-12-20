@@ -23,13 +23,16 @@ namespace SkyHigh.Models.Reservations
 
 
         [Required]
-        [Display(Name = "Departure Date")]
+        [Display(Name = "Departure")]
         public DateTime? DepartureDate { get; set; }
 
-        [Display(Name = "Return Date")]
+        [Display(Name = "Return")]
         public DateTime? ReturnDate { get; set; }
 
         public string TripType { get; set; }
+
+        [Display(Name = "Passengers")]
+        public int PassengersCount { get; set; }
 
         [Required]
         [Display(Name = "Travel Class")]
@@ -37,12 +40,12 @@ namespace SkyHigh.Models.Reservations
 
         public IEnumerable<SelectListItem> TravelClasses => Enum.GetNames(typeof(TravelClass)).Select(v => new SelectListItem { Text = v, Value = v });
 
-
-        //---------------
-        //public IEnumerable<string> SelectedFlightIds { get; set; }
+        [Required]
+        public string InboundRouteIds { get; set; }
 
         [Required]
-        public string RadioInput { get; set; }
+        public string OutboundRouteIds { get; set; }
+
 
 
     }

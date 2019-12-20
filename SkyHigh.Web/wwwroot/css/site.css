@@ -59,3 +59,11 @@ body {
     word-wrap: break-word;
     word-break: break-all;
 }*/
+
+.table-vertical-align{
+
+}
+
+.table.table-vertical-align > tbody > tr > td {
+    vertical-align: middle;
+}
